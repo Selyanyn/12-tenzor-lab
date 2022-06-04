@@ -98,6 +98,24 @@ class MainViewModelTest {
         verify(mockRepository, times(1)).getArticle() //Mockito verify
     }
 
+
+    /* Выше уже проверялся метод запроса данных из репозитория при инициализации;
+    остаётся лишь проверить, что вызывается метод saveArticleAuthor.*/
+    @Test
+    fun `On vm init requested data saved in repository`() {
+        // Код на проверку state не изменился - нужно убедиться, что передан нужный объект
+        assertFalse(vm.state.value!!.isEmpty)
+        assertEquals("title", vm.state.value!!.title)
+        assertEquals("subtitle", vm.state.value!!.subtitle)
+        assertEquals("description", vm.state.value!!.descriptions)
+        assertEquals("author", vm.state.value!!.author)
+        assertEquals("50", vm.state.value!!.views)
+        assertEquals("200", vm.state.value!!.likes)
+        // Проверка вызова saveArticleAuthor с нужным аргументом
+        // (такая конструкция работает; при подаче Article() вместо testArticle появится ошибка Argument(s) are different!)
+        verify(mockRepository, times(1)).saveArticleAuthor(testArticle)
+    }
+
     @Test
     fun `On vm refresh, increase counter`(){
         assertEquals(0, vm.refreshCounts)
